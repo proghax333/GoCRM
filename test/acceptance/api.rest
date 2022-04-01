@@ -1,0 +1,14 @@
+###
+GET http://localhost:5000/api/v1/customers
+
+###
+GET http://localhost:5000/api/v1/customers/1
+
+###
+POST http://localhost:5000/api/v1/customers
+
+###
+PUT http://localhost:5000/api/v1/customers/1
+
+###
+DELETE http://localhost:5000/api/v1/customers/1
