@@ -3,6 +3,7 @@ package config
 import (
 	"GoCRM/models"
 	"GoCRM/utils"
+	"time"
 
 	"github.com/joho/godotenv"
 	"github.com/kamva/mgm/v3"
@@ -14,7 +15,21 @@ func ConfigureEnv() error {
 }
 
 func ConfigureDatabase(connection_uri string, database_name string) error {
-	err := mgm.SetDefaultConfig(nil, database_name, options.Client().ApplyURI("mongodb://root:12345@localhost:27017"))
+	err := mgm.SetDefaultConfig(&mgm.Config{CtxTimeout: 8 * time.Second}, database_name, options.Client().ApplyURI(connection_uri))
+
+	if err != nil {
+		return err
+	}
+
+	_, client, _, err := mgm.DefaultConfigs()
+	if err != nil {
+		return err
+	}
+
+	db := client.Database(database_name)
+
+	_, err = db.ListCollectionNames(mgm.Ctx(), struct{}{})
+
 	return err
 }
 
