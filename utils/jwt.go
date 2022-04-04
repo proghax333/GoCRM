@@ -11,11 +11,13 @@ func GetSecret() (string, error) {
 }
 
 func SignToken(data jwt.MapClaims) (string, error) {
-	secret, err := GetSecret()
+	secret_string, err := GetSecret()
 
 	if err != nil {
 		return "", err
 	}
+
+	secret := []byte(secret_string)
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, data)
 
@@ -38,7 +40,7 @@ func DecodeToken(tokenString string) (interface{}, error) {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}
 
-		return secret, nil
+		return []byte(secret), nil
 	})
 
 	if err != nil {
