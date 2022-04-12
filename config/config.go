@@ -3,6 +3,7 @@ package config
 import (
 	"GoCRM/models"
 	"GoCRM/utils"
+	"fmt"
 	"time"
 
 	"github.com/joho/godotenv"
@@ -27,8 +28,11 @@ func ConfigureDatabase(connection_uri string, database_name string) error {
 	}
 
 	db := client.Database(database_name)
+	err = db.Client().Connect(mgm.Ctx())
 
-	_, err = db.ListCollectionNames(mgm.Ctx(), struct{}{})
+	collections, err := db.ListCollectionNames(mgm.Ctx(), struct{}{})
+
+	fmt.Printf("DB: %v | Collections: %v\n\n", database_name, collections)
 
 	return err
 }
